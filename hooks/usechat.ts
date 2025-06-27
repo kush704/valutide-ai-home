@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabaseclient';
 
 type Message = {
   id?: string;
@@ -22,62 +21,37 @@ export const useChat = () => {
   const [chats, setChats] = useState<Chat[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔁 Fetch chats on load
+  // ⚡ Generate a random ID
+  const generateId = () => Math.random().toString(36).substring(2, 10);
+
+  // 🔁 Load mock chats on mount
   useEffect(() => {
-    const fetchChats = async () => {
-      const { data, error } = await supabase
-        .from('chats')
-        .select('*')
-        .order('created_at', { ascending: false });
-      if (!error && data) setChats(data);
-    };
-    fetchChats();
+    const initialChatId = generateId();
+    const now = new Date().toISOString();
+    const newChat: Chat = { id: initialChatId, created_at: now };
+
+    setChats([newChat]);
+    setChatId(initialChatId);
   }, []);
 
-  // 🔁 Fetch messages whenever chatId changes
-  useEffect(() => {
-    if (!chatId) return;
-    setLoading(true);
-    const fetchMessages = async () => {
-      const { data, error } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('chat_id', chatId)
-        .order('created_at', { ascending: true });
-      if (!error && data) setMessages(data);
-      setLoading(false);
-    };
-    fetchMessages();
-  }, [chatId]);
-
-  // ➕ Start a new chat
-  const startNewChat = async () => {
-    const { data, error } = await supabase
-      .from('chats')
-      .insert({}) // 👈 empty insert, auto timestamp
-      .select()
-      .single();
-
-    if (!error && data) {
-      setChatId(data.id);
-      setMessages([]);
-      setChats((prev) => [data, ...prev]);
-      return data.id;
-    }
-    return '';
+  // ➕ Start new chat
+  const startNewChat = () => {
+    const id = generateId();
+    const newChat: Chat = { id, created_at: new Date().toISOString() };
+    setChats((prev) => [newChat, ...prev]);
+    setChatId(id);
+    setMessages([]);
+    return id;
   };
 
-  // ➕ Add message to current chat
-  const addMessage = async (message: Message) => {
-    const { data, error } = await supabase
-      .from('messages')
-      .insert(message)
-      .select()
-      .single();
-
-    if (!error && data) {
-      setMessages((prev) => [...prev, data]);
-    }
+  // ➕ Add message
+  const addMessage = (message: Message) => {
+    const msg: Message = {
+      ...message,
+      id: generateId(),
+      created_at: new Date().toISOString(),
+    };
+    setMessages((prev) => [...prev, msg]);
   };
 
   return {
