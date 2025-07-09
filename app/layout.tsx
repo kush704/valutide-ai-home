@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: 'ValuCommerce AI',
   description: 'Your 24/7 commerce brain with law updates, AI news, and more.',
   icons: {
-    icon: '/favicon.png', // ✅ standard file name
+    icon: '/favicon-v2.png', // 👈 update here
   },
 }
 
