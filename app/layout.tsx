@@ -1,9 +1,9 @@
-// app/layout.tsx
 'use client';
 
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
+import { SessionProvider } from 'next-auth/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,9 +20,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className={`${inter.className} bg-gradient-to-br from-[#f0f9ff] via-white to-[#e0f7fa] text-gray-800`}>
-        {children}
-        <Analytics />
+        <SessionProvider>
+          {children}
+          <Analytics />
+        </SessionProvider>
       </body>
     </html>
   );
 }
+
