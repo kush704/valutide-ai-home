@@ -104,6 +104,15 @@ export default function HomePage() {
           bgDark="bg-gradient-to-br from-yellow-800 via-orange-800 to-red-800"
           darkMode={darkMode}
         />
+        <Card
+          title="💬 Feedback"
+          desc="Tell us what you think about ValuCommerce"
+          onClick={() => handleNavigate('/feedback')}
+          borderColor="border-green-500"
+          bgLight="bg-white"
+          bgDark="bg-gradient-to-br from-green-900 via-emerald-800 to-teal-800"
+          darkMode={darkMode}
+        />
       </div>
 
       {/* Footer */}
@@ -124,6 +133,7 @@ export default function HomePage() {
   );
 }
 
+// ✅ Card Component (original style)
 function Card({
   title,
   desc,
