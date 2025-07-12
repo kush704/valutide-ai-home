@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://valucommerce.vercel.app/sitemap.xml
